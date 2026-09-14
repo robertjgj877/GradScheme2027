@@ -27,10 +27,13 @@ export async function crawlSource(source: Source, userAgent: string): Promise<Ca
   const description = decode(first(html.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']*)/i)?.[1], text.slice(0, 500)));
   const links = [...html.matchAll(/<a[^>]+href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi)]
     .map(m => ({ url: absolute(m[1], source.url), label: stripHTML(m[2]) }))
-    .filter(x => x.url && /graduate|marketing|brand|commercial|product|early.career/i.test(x.label + " " + x.url))
+    .filter(x => {
+      const value = x.label + " " + x.url;
+      return x.url && /marketing|brand|consumer|commercial|product/i.test(value) && /graduate|early.career|2027/i.test(value);
+    })
     .slice(0, 30);
   const base: Candidate = { employer: source.employer ?? inferEmployer(title, source.name), title, location: "", description, applicationURL: source.url, sourceURL: source.url, sourceName: source.name, pageText: text };
-  const results: Candidate[] = [base];
+  const results: Candidate[] = source.employer ? [base] : [];
   for (const link of links) {
     if (new URL(link.url).origin !== new URL(source.url).origin) continue;
     await delay(300);
