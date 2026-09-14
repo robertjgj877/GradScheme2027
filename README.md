@@ -1,11 +1,12 @@
 # GradScheme 2027
 
-A native SwiftUI iPhone app and a Cloudflare Worker that monitors UK marketing, brand-management and FMCG graduate schemes. Results are accepted only when the source explicitly states a 2027 start, with London roles ranked first.
+A native SwiftUI iPhone app with scheduled GitHub monitoring for UK marketing, brand-management and FMCG graduate schemes. Results are accepted only when the source explicitly states a 2027 start, with London roles ranked first.
 
 ## Repository layout
 
 - `ios/` — iOS 17+ SwiftUI app (generated with XcodeGen)
-- `worker/` — Cloudflare Worker, scheduled crawler and D1 database
+- `worker/` — crawler, verification rules and tests
+- `docs/api/schemes` — automatically updated live data feed used by the app
 
 ## Quick start: iPhone app
 
@@ -13,20 +14,11 @@ A native SwiftUI iPhone app and a Cloudflare Worker that monitors UK marketing, 
 2. In `ios/`, run `xcodegen generate`.
 3. Open `GradScheme2027.xcodeproj`.
 4. Change the development team and bundle identifier under Signing & Capabilities.
-5. In `Configuration.swift`, replace the example API URL after deploying the worker.
-6. Run on an iPhone or Simulator.
+5. Run on an iPhone or Simulator. It is already configured to use this repository's live feed.
 
-## Quick start: monitoring worker
+## Automatic monitoring
 
-1. Install Node 20+ and run `cd worker && npm install`.
-2. Log in with `npx wrangler login`.
-3. Create D1: `npx wrangler d1 create gradscheme-2027`.
-4. Put the returned database ID into `wrangler.toml`.
-5. Apply the schema: `npm run db:migrate:remote`.
-6. Deploy: `npm run deploy`.
-7. Trigger an immediate scan: `curl -X POST https://YOUR-WORKER.workers.dev/admin/scan -H 'Authorization: Bearer YOUR_ADMIN_TOKEN'`.
-
-Set `ADMIN_TOKEN` with `npx wrangler secret put ADMIN_TOKEN`. The scheduled job runs every six hours.
+GitHub Actions runs `.github/workflows/scan.yml` every six hours and updates the feed. It can also be started manually from the repository's Actions tab. No Cloudflare account or server is required.
 
 ## Verification rule
 
