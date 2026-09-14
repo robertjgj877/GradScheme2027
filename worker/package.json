@@ -1,0 +1,20 @@
+{
+  "name": "gradscheme-2027-worker",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "db:migrate:local": "wrangler d1 execute gradscheme-2027 --local --file=schema.sql",
+    "db:migrate:remote": "wrangler d1 execute gradscheme-2027 --remote --file=schema.sql"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260914.1",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4",
+    "wrangler": "^4.131.2"
+  }
+}
