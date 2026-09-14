@@ -13,12 +13,12 @@ struct APIClient {
     }()
 
     func fetchSchemes() async throws -> SchemeResponse {
-        let url = Configuration.apiBaseURL.appending(path: "api/schemes")
-        let (data, response) = try await URLSession.shared.data(from: url)
+        var request = URLRequest(url: Configuration.schemesURL)
+        request.cachePolicy = .reloadIgnoringLocalCacheData
+        let (data, response) = try await URLSession.shared.data(for: request)
         guard let http = response as? HTTPURLResponse, http.statusCode == 200 else {
             throw APIError.badResponse
         }
         return try decoder.decode(SchemeResponse.self, from: data)
     }
 }
-
