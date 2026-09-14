@@ -18,8 +18,8 @@ export async function scan(env: Env): Promise<{checked:number; accepted:number}>
   return { checked, accepted };
 }
 
-async function crawlSource(source: Source, userAgent: string): Promise<Candidate[]> {
-  const response = await fetch(source.url, { headers: { "User-Agent": userAgent, Accept: "text/html" }, redirect: "follow" });
+export async function crawlSource(source: Source, userAgent: string): Promise<Candidate[]> {
+  const response = await fetch(source.url, { headers: { "User-Agent": userAgent, Accept: "text/html" }, redirect: "follow", signal: AbortSignal.timeout(15_000) });
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   const html = await response.text();
   const text = stripHTML(html);
@@ -35,7 +35,7 @@ async function crawlSource(source: Source, userAgent: string): Promise<Candidate
     if (new URL(link.url).origin !== new URL(source.url).origin) continue;
     await delay(300);
     try {
-      const detailResponse = await fetch(link.url, { headers: { "User-Agent": userAgent, Accept: "text/html" } });
+      const detailResponse = await fetch(link.url, { headers: { "User-Agent": userAgent, Accept: "text/html" }, signal: AbortSignal.timeout(15_000) });
       if (!detailResponse.ok) continue;
       const detailHTML = await detailResponse.text(); const detailText = stripHTML(detailHTML);
       results.push({ ...base, title: link.label || title, description: detailText.slice(0, 700), applicationURL: link.url, sourceURL: link.url, pageText: detailText });
@@ -57,4 +57,3 @@ function first(value:string|undefined,fallback:string):string{return value?.trim
 function absolute(href:string,base:string):string{try{return new URL(href,base).toString()}catch{return ""}}
 function inferEmployer(title:string,fallback:string):string{return title.split(/[|–—-]/)[0]?.trim()||fallback}
 function delay(ms:number){return new Promise(resolve=>setTimeout(resolve,ms))}
-
