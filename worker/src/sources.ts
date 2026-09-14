@@ -8,9 +8,5 @@ export const sources: Source[] = [
   { name: "Unilever Careers", employer: "Unilever", url: "https://careers.unilever.com/uk-early-careers" },
   { name: "L'Oreal Careers", employer: "L'Oréal", url: "https://careers.loreal.com/en_US/content/UnitedKingdomGraduates" },
   { name: "Nestlé UK Careers", employer: "Nestlé", url: "https://www.nestle.co.uk/en-gb/jobs/students-graduates" },
-  { name: "P&G UK Careers", employer: "Procter & Gamble", url: "https://www.pgcareers.com/eu/en/uk-students" },
-  { name: "Bright Network FMCG", url: "https://www.brightnetwork.co.uk/graduate-jobs/consumer-fmcg-retail/" },
-  { name: "targetjobs Marketing", url: "https://targetjobs.co.uk/graduate-jobs/marketing" },
-  { name: "Higherin Marketing", url: "https://higherin.com/graduate-jobs/marketing" }
+  { name: "P&G UK Careers", employer: "Procter & Gamble", url: "https://www.pgcareers.com/eu/en/uk-students" }
 ];
-
