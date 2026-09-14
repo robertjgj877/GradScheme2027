@@ -8,4 +8,5 @@ describe("2027 verification",()=>{
   it("rejects merely posted in 2027",()=>{ expect(verify({...base,pageText:"Posted 4 January 2027."})).toBeNull() });
   it("rejects stale start years",()=>{ expect(verify({...base,pageText:"Applications close soon. Starting in 2026. 2027 plans follow."})).toBeNull() });
   it("rejects non-marketing roles",()=>{ expect(verify({...base,title:"Finance Graduate",description:"Accounting",pageText:"2027 Graduate Programme"})).toBeNull() });
+  it("rejects category pages",()=>{ expect(verify({...base,title:"Marketing graduate jobs & schemes 2027",pageText:"2027 Graduate Programme London"})).toBeNull() });
 });
