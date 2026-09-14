@@ -1,6 +1,11 @@
 name: Scan graduate schemes
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - "worker/**"
+      - ".github/workflows/scan.yml"
   schedule:
     - cron: "17 */6 * * *"
   workflow_dispatch:
