@@ -1,4 +1,5 @@
 import BackgroundTasks
+import Foundation
 
 final class BackgroundRefresh {
     static let shared = BackgroundRefresh()
@@ -21,10 +22,17 @@ final class BackgroundRefresh {
         schedule()
         let work = Task {
             let response = try await APIClient().fetchSchemes()
-            return response.schemes.count
+            let defaults = UserDefaults.standard
+            let key = "seenSchemeIDs"
+            let seen = Set(defaults.stringArray(forKey: key) ?? [])
+            let valid = response.schemes.filter { $0.startYear == 2027 }
+            for scheme in valid.filter({ !seen.contains($0.id) }).prefix(5) {
+                await NotificationManager.shared.notifyNewScheme(scheme)
+            }
+            defaults.set(Array(seen.union(valid.map(\.id))), forKey: key)
+            return valid.count
         }
         task.expirationHandler = { work.cancel() }
         Task { task.setTaskCompleted(success: (try? await work.value) != nil) }
     }
 }
-
