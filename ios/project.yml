@@ -1,0 +1,41 @@
+name: GradScheme2027
+options:
+  bundleIdPrefix: uk.co.gradscheme2027
+  deploymentTarget:
+    iOS: "17.0"
+settings:
+  base:
+    SWIFT_VERSION: 5.10
+    CURRENT_PROJECT_VERSION: 1
+    MARKETING_VERSION: 1.0.0
+targets:
+  GradScheme2027:
+    type: application
+    platform: iOS
+    sources:
+      - GradScheme2027
+    info:
+      path: GradScheme2027/Info.plist
+      properties:
+        CFBundleDisplayName: GradScheme 2027
+        UILaunchScreen: {}
+        BGTaskSchedulerPermittedIdentifiers:
+          - uk.co.gradscheme2027.refresh
+        UIBackgroundModes:
+          - fetch
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: uk.co.gradscheme2027.app
+        INFOPLIST_FILE: GradScheme2027/Info.plist
+        CODE_SIGN_STYLE: Automatic
+    scheme:
+      testTargets:
+        - GradScheme2027Tests
+  GradScheme2027Tests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - GradScheme2027Tests
+    dependencies:
+      - target: GradScheme2027
+
