@@ -1,0 +1,15 @@
+name = "gradscheme-2027"
+main = "src/index.ts"
+compatibility_date = "2026-09-01"
+
+[triggers]
+crons = ["17 */6 * * *"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "gradscheme-2027"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
+
+[vars]
+USER_AGENT = "GradScheme2027/1.0 (+mailto:replace@example.com)"
+
