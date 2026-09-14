@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { crawlSource } from "./crawler";
 import { sources } from "./sources";
@@ -6,8 +6,7 @@ import { verify } from "./verify";
 import type { VerifiedScheme } from "./types";
 
 const output = resolve(process.cwd(), "../docs/api/schemes");
-const previous = await loadPrevious(output);
-const byID = new Map(previous.map(item => [item.id, item]));
+const byID = new Map<string, VerifiedScheme>();
 
 for (const source of sources) {
   try {
@@ -15,8 +14,7 @@ for (const source of sources) {
     for (const candidate of candidates) {
       const verified = verify(candidate);
       if (!verified) continue;
-      const existing = byID.get(verified.id);
-      byID.set(verified.id, existing ? { ...verified, discoveredAt: existing.discoveredAt } : verified);
+      byID.set(verified.id, verified);
     }
   } catch (error) {
     console.error(`Could not check ${source.name}:`, error);
@@ -30,10 +28,3 @@ const schemes = [...byID.values()]
 await mkdir(dirname(output), { recursive: true });
 await writeFile(output, JSON.stringify({ schemes, generatedAt: new Date().toISOString() }, null, 2) + "\n");
 console.log(`Published ${schemes.length} verified 2027 schemes.`);
-
-async function loadPrevious(path: string): Promise<VerifiedScheme[]> {
-  try {
-    const value = JSON.parse(await readFile(path, "utf8"));
-    return Array.isArray(value.schemes) ? value.schemes.filter((item: VerifiedScheme) => item.startYear === 2027) : [];
-  } catch { return []; }
-}
