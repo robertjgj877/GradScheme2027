@@ -1,0 +1,8 @@
+.DS_Store
+DerivedData/
+*.xcuserstate
+ios/GradScheme2027.xcodeproj/
+worker/node_modules/
+worker/.wrangler/
+worker/.dev.vars
+
